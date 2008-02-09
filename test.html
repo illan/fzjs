@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <style>textarea {width:30em; height:20em;}</style>
+  </head>
+  <body>
+	<fieldset><legend>Variables</legend>
+	<textarea id="variables">
+			{'velocidad':
+					{'lenta':new Conjunto([[0,1],[20,.5],[120,0]]),
+					 'rapida':new Conjunto([[0,0],[100,.5],[140,1]])},
+			'peso':
+					{'pesado':new Conjunto([[0,0],[1000,1]]),
+					'ligero':new Conjunto([[0,1],[500,0]])},
+			'fuerza':
+					{'fuerte':new Conjunto([[0,0],[1000,1]]),
+					 'debil':new Conjunto([[0,1],[1000,0]])}
+			}
+	</textarea>
+	</fieldset>
+	<fieldset><legend>Hechos</legend>
+	<textarea id="hechos">
+		[oan("velocidad","lenta",100),
+		oan("velocidad","rapida",100),
+		oa("peso","ligero")]
+	</textarea>
+	</fieldset>
+	<fieldset><legend>Reglas</legend>
+	<textarea id="reglas">
+[new R(new T("and",oa("velocidad","rapida"),oa("peso","pesado")),
+								new T("",oa("fuerza","fuerte"))),
+				new R(new T("or",oa("velocidad","lenta"),oa("peso","pesado")),
+								new T("",oav("fuerza","debil",.5)))];
+	</textarea>
+	</fieldset>
+
+<hr/>
+	<br/>Consulta:<input type="text" value="fuerza" id="consulta" />
+	<input type="button" onclick="javascript:inicializar()" value="evaluar"/>
+<hr/>
+
+	<fieldset><legend>Resultado</legend>
+	<textarea id="resultado">
+	</textarea>
+	</fieldset>
+
+	<script src="fuzzyjs.js">
+	</script>
+	<script>
+
+function $(id){return document.getElementById(id);}
+/// GLOBAL: para oan
+var variables;
+
+function inicializar(){
+try{
+/*
+var hechos;
+eval("hechos="+$("hechos").value);
+var reglas;
+eval("reglas="+$("reglas").value);
+*/
+var srce=$("variables").value;
+// var variables=eval(srce);
+
+eval("variables="+srce+";");
+
+//alert("hechos cargados");
+var reglas=eval($("reglas").value);
+//alert("reglas cargadas");
+var consulta=$("consulta").value;
+
+var motor=new MotorDeInferencia(variables,reglas);
+
+//alert("variables cargadas");
+try{
+var hechos=eval($("hechos").value);
+}catch(e){
+alert("Error cargando los hechos");
+}
+var hechosNuevos=motor.inferir(hechos);
+
+	var txt="";
+	var objetivo=new Conjunto([[1,1]]);
+	
+	for (var i in hechosNuevos){
+		var h=hechosNuevos[i];
+		txt+=h.texto();	
+		//document.writeln("oav("+[h.o,h.a,h.v]+") -> ");	
+		var resultado=variables[h.o][h.a].truncar(h.v);
+		txt+="[ centroide: "+redondear(resultado.centroide())+" ]\n";		
+		if (h.o==consulta){
+				objetivo=objetivo.interseccion(resultado);
+		}
+	}
+	$("resultado").value=txt+"\n "+consulta+":"+redondear(objetivo.centroide())+"\n";
+	
+	
+}catch(e){alert(e+" ,"+e.lineNumber); throw e;}
+}
+
+	</script>
+	</body>
+</html>
