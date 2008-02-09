@@ -1,22 +1,27 @@
 <html>
   <head>
-    <title></title>
+    <title>FZJS</title>
     <meta content="">
     <style>textarea {width:30em; height:20em;}</style>
   </head>
   <body>
+  <h1>FZJS: simple fuzzy Logic for javascript</h1>
+  <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=216409&amp;type=2" alt="SourceForge.net Logo" border="0" height="37" width="125"></a>
+  <a href="fuzzyjs.js">source</a>
+  <a href="#" onclick="document.getElementById('demo').style.display=''">Demo</a>
+  <div id="demo" style="display:none;">
 	<fieldset><legend>Variables</legend>
 	<textarea id="variables">
-			{'velocidad':
-					{'lenta':new Conjunto([[0,1],[20,.5],[120,0]]),
-					 'rapida':new Conjunto([[0,0],[100,.5],[140,1]])},
-			'peso':
-					{'pesado':new Conjunto([[0,0],[1000,1]]),
-					'ligero':new Conjunto([[0,1],[500,0]])},
-			'fuerza':
-					{'fuerte':new Conjunto([[0,0],[1000,1]]),
-					 'debil':new Conjunto([[0,1],[1000,0]])}
-			}
+	{'velocidad':
+			{'lenta':new Conjunto([[0,1],[20,.5],[120,0]]),
+			 'rapida':new Conjunto([[0,0],[100,.5],[140,1]])},
+	'peso':
+			{'pesado':new Conjunto([[0,0],[1000,1]]),
+			'ligero':new Conjunto([[0,1],[500,0]])},
+	'fuerza':
+			{'fuerte':new Conjunto([[0,0],[1000,1]]),
+			 'debil':new Conjunto([[0,1],[1000,0]])}
+	}
 	</textarea>
 	</fieldset>
 	<fieldset><legend>Hechos</legend>
@@ -26,7 +31,7 @@
 		oa("peso","ligero")]
 	</textarea>
 	</fieldset>
-	<fieldset><legend>Reglas</legend>
+	<fieldset><legend>Reglas/Terminos</legend>
 	<textarea id="reglas">
 [new R(new T("and",oa("velocidad","rapida"),oa("peso","pesado")),
 								new T("",oa("fuerza","fuerte"))),
@@ -44,6 +49,7 @@
 	<textarea id="resultado">
 	</textarea>
 	</fieldset>
+ </div>
 
 	<script src="fuzzyjs.js">
 	</script>
